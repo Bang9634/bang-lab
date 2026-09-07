@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="404 — NOT FOUND" description="요청한 페이지를 찾을 수 없어요. Bang's Lab 홈으로 돌아가세요.">
+  <section class="not-found" aria-labelledby="error-title">
+    <div class="error-content">
+      <p class="error-label">HTTP RESPONSE / CLIENT ERROR</p>
+      <h1 id="error-title"><span class="error-code">404</span><span class="error-status">NOT FOUND</span></h1>
+      <div class="error-detail">
+        <p class="error-output"><span aria-hidden="true">&gt; </span>Requested page does not exist.</p>
+        <p class="error-description">주소가 변경되었거나 존재하지 않는 페이지예요.</p>
+      </div>
+      <a class="home-command" href="/" aria-label="홈으로 돌아가기">
+        <span class="command-prompt" aria-hidden="true">$</span>
+        <code>cd ~/</code>
+        <span class="command-action">홈으로 돌아가기 <span aria-hidden="true">↵</span></span>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .not-found {
+    min-height: calc(100svh - var(--header-height) - 80px);
+    display: grid;
+    place-items: center;
+    padding-block: 64px;
+    text-align: center;
+  }
+  .error-content { width: min(100%, 520px); }
+  .error-label, .error-code, .error-status, .error-output, .home-command {
+    font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+  .error-label { font-size: 10px; letter-spacing: .15em; color: #6e6e73; }
+  .error-code {
+    display: block;
+    margin-top: 24px;
+    font-size: clamp(112px, 22vw, 228px);
+    font-weight: 500;
+    letter-spacing: -.08em;
+    text-indent: -.08em;
+    line-height: 1;
+  }
+  .error-status { display: block; margin-top: 16px; font-size: clamp(17px, 3vw, 23px); font-weight: 500; letter-spacing: .22em; text-indent: .22em; }
+  .error-detail { margin-top: 36px; padding-top: 26px; border-top: 1px solid #e8e8ed; }
+  .error-output { font-size: 12px; color: #515154; }
+  .error-description { margin-top: 10px; color: #6e6e73; font-size: 13px; }
+  .home-command {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 12px;
+    width: fit-content;
+    max-width: 100%;
+    margin: 30px auto 0;
+    padding: 13px 19px;
+    border: 1px solid #d2d2d7;
+    border-radius: 6px;
+    font-size: 14px;
+    transition: background-color .2s, border-color .2s;
+  }
+  .command-prompt { color: #6e6e73; }
+  .home-command code { font: inherit; }
+  .command-action { font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", sans-serif; font-size: 11px; color: #6e6e73; }
+  .command-action span { margin-left: 8px; }
+  .home-command:hover { background: #f5f5f7; border-color: #86868b; }
+  @media (max-width: 400px) {
+    .error-label { font-size: 9px; letter-spacing: .08em; }
+    .error-output { font-size: 11px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .home-command { transition: none; }
+  }
+</style>

@@ -1,0 +1,31 @@
+name: Validate website
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - run: npm run build
+        env:
+          CONTACT_EMAIL: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.CONTACT_EMAIL || '' }}
+          PROFILE_NAME: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.PROFILE_NAME || '' }}
+      - uses: actions/upload-artifact@v4
+        with:
+          name: bang-lab-web
+          path: apps/web/dist
+          if-no-files-found: error

@@ -1,0 +1,62 @@
+---
+import '../styles/global.css';
+import { z } from 'astro/zod';
+
+const contactEmail = (import.meta.env.CONTACT_EMAIL ?? '').trim();
+const profileName = (import.meta.env.PROFILE_NAME ?? '').trim() || "Bang's Lab";
+if (contactEmail && !z.email().safeParse(contactEmail).success) {
+  throw new Error('CONTACT_EMAIL must be a valid email address or empty.');
+}
+interface Props { title?: string; description?: string; landing?: boolean }
+const { landing = false, title = "Bang's Lab", description = '코드를 만들고, 가설을 세우고, 측정하며 배우는 소프트웨어 엔지니어링 기록.' } = Astro.props;
+const navigation = [['about', 'About'], ['work', 'Work'], ['contact', 'Contact']];
+---
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    {landing && <script is:inline>
+      // Start each page load at the terminal instead of restoring a section anchor.
+      history.scrollRestoration = 'manual';
+      if (location.hash) {
+        history.replaceState(history.state, '', location.pathname + location.search);
+      }
+      window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      window.addEventListener('pageshow', () => {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+      }, { once: true });
+    </script>}
+    <title>{title === "Bang's Lab" ? title : `${title} · Bang's Lab`}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+  </head>
+  <body>
+    <a class="skip-link" href="#main">본문으로 바로가기</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href={landing ? '#top' : '/#top'} aria-label="Bang's Lab 홈으로">
+          <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="5"/><path d="m6 8 4 4-4 4m7 0h5"/></svg>
+          <span>Bang's Lab</span>
+        </a>
+        <nav aria-label="주요 메뉴">
+          {navigation.map(([id, label]) => <a href={landing ? `#${id}` : `/#${id}`}>{label}</a>)}
+          <span class="nav-disabled" role="link" aria-disabled="true" aria-label="Log — 준비 중" title="준비 중">Log</span>
+        </nav>
+      </div>
+    </header>
+    <main id="main" class:list={[{ wrap: !landing, landing }]}><slot /></main>
+    <footer class="wrap">
+      <div class="footer-contact">
+        {contactEmail && <a href={`mailto:${encodeURIComponent(contactEmail)}`}>{contactEmail} <span aria-hidden="true">↗</span></a>}
+      </div>
+      <small>© {new Date().getFullYear()} {profileName} · ALL RIGHTS RESERVED.</small>
+    </footer>
+  </body>
+</html>

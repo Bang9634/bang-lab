@@ -1,0 +1,99 @@
+:root {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Apple SD Gothic Neo", sans-serif;
+  color: #1d1d1f;
+  background: #fff;
+  font-synthesis: none;
+  color-scheme: light;
+  line-height: 1.6;
+  --muted: #77777c;
+  --line: #e8e8ed;
+  --header-height: 76px;
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body { margin: 0; }
+a { color: inherit; text-decoration: none; }
+a:focus-visible { outline: 2px solid currentColor; outline-offset: 6px; border-radius: 3px; }
+h1, h2, h3, p { margin: 0; }
+h1, h2, h3 { line-height: 1.15; }
+p { word-break: keep-all; overflow-wrap: anywhere; }
+.wrap { width: min(1100px, calc(100% - 64px)); margin-inline: auto; }
+.site-header {
+  position: fixed;
+  inset: 0 0 auto;
+  height: var(--header-height);
+  z-index: 20;
+  background: rgb(255 255 255 / 88%);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgb(0 0 0 / 4%);
+}
+.header-inner { width: min(1320px, calc(100% - 80px)); height: 100%; margin: auto; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.brand { display: inline-flex; align-items: center; gap: 11px; font-size: 19px; font-weight: 650; letter-spacing: -.6px; white-space: nowrap; }
+.brand svg { flex-shrink: 0; }
+nav { display: flex; align-items: center; gap: 34px; font-size: 13px; font-weight: 500; }
+nav a { padding-block: 12px; transition: opacity .2s; }
+nav a:hover { opacity: .5; }
+.nav-disabled { color: #96969c; cursor: default; }
+.screen { min-height: 100svh; position: relative; padding: calc(var(--header-height) + 60px) 7vw 80px; display: flex; align-items: center; }
+.terminal-screen { background: #fafafa; }
+.terminal { width: 100%; max-width: 1500px; margin-inline: auto; }
+.terminal-caption { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px; color: #a1a1a6; margin-bottom: 32px; }
+.terminal-line { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(20px, 3.05vw, 52px); font-weight: 450; line-height: 1.55; letter-spacing: -.065em; }
+.terminal-prompt { white-space: nowrap; color: #85858b; }
+.terminal-output { overflow-wrap: anywhere; }
+.terminal-cursor { display: inline-block; width: .48em; height: 1.05em; margin-left: .1em; background: #1d1d1f; vertical-align: -.13em; animation: cursor-blink .8s step-end infinite; }
+.scroll-cue { position: absolute; bottom: 35px; left: 50%; transform: translateX(-50%); display: flex; flex-direction: column; align-items: center; gap: 8px; color: #86868b; font-size: 11px; letter-spacing: .025em; }
+.scroll-cue span:last-child { font-size: 20px; }
+.content-screen { justify-content: center; }
+.section-content { width: min(100%, 1060px); }
+.section-label { font-size: 13px; color: #86868b; margin-bottom: 34px; }
+.content-screen h2 { font-size: clamp(38px, 6.5vw, 88px); font-weight: 650; letter-spacing: -.065em; line-height: 1.18; word-break: keep-all; }
+.section-description { font-size: clamp(17px, 2vw, 23px); color: #86868b; line-height: 1.7; margin-top: 32px; letter-spacing: -.035em; }
+.work-screen { background: #f5f5f7; }
+.work-summary { display: flex; align-items: center; flex-wrap: wrap; gap: 16px; margin-top: 42px; }
+.work-summary h3 { font-size: 21px; letter-spacing: -.04em; font-weight: 550; }
+.work-summary span { font-size: 11px; color: #86868b; border: 1px solid #d2d2d7; padding: 3px 9px; border-radius: 20px; }
+.work-summary + .section-description { margin-top: 16px; }
+.welcome { position: fixed; inset: 0; z-index: 100; background: #000; color: #fff; display: grid; place-items: center; overflow: hidden; pointer-events: none; animation: welcome-exit 900ms cubic-bezier(.65,0,.35,1) 1300ms forwards; }
+.welcome-word { position: relative; display: block; width: 0; white-space: nowrap; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: clamp(18px, 3.5vw, 46px); font-weight: 600; line-height: 1.3; letter-spacing: -.05em; animation: welcome-type 560ms steps(var(--welcome-steps),end) 160ms forwards, welcome-zoom 900ms cubic-bezier(.65,0,.35,1) 1300ms forwards; }
+.welcome-text { display: block; overflow: hidden; }
+.welcome-word::after { content: ''; position: absolute; left: calc(100% + .1em); top: 50%; transform: translateY(-50%); width: .48em; height: 1.05em; background: currentColor; animation: cursor-blink .8s step-end infinite; }
+@keyframes welcome-type { to { width: var(--welcome-width); } }
+@keyframes welcome-zoom { to { transform: scale(4); opacity: 0; filter: blur(5px); } }
+@keyframes welcome-exit { to { opacity: 0; visibility: hidden; } }
+@keyframes cursor-blink { 50% { opacity: 0; } }
+footer { display: flex; justify-content: space-between; gap: 20px; padding-block: 25px; font-size: 11px; color: #86868b; }
+.footer-contact { min-width: 0; overflow-wrap: anywhere; }
+.footer-contact a:hover { color: #1d1d1f; }
+footer small { font-size: inherit; }
+.skip-link { position: fixed; top: -100px; left: 20px; z-index: 110; padding: 10px; background: white; }
+.skip-link:focus { top: 10px; }
+/* Shared styling for the not-found page. */
+main.wrap { padding-top: var(--header-height); min-height: calc(100svh - 80px); }
+@media (max-width: 700px) {
+  :root { --header-height: 68px; }
+  .header-inner { width: calc(100% - 36px); gap: 12px; }
+  .brand { font-size: 15px; gap: 7px; }
+  .brand svg { width: 21px; height: 21px; }
+  nav { gap: 17px; font-size: 12px; }
+  .screen { padding-inline: 7vw; }
+  .terminal-line { font-size: clamp(22px, 5.3vw, 37px); }
+  .terminal-prompt { display: block; margin-bottom: 12px; }
+  .terminal-output { display: block; min-height: 4.65em; }
+  .terminal-caption { margin-bottom: 24px; }
+  .wrap { width: calc(100% - 40px); }
+  footer { flex-direction: column; gap: 8px; }
+}
+@media (max-width: 370px) {
+  .header-inner { width: calc(100% - 24px); }
+  nav { gap: 11px; }
+  .brand { font-size: 14px; }
+  .brand svg { width: 18px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .welcome { display: none; animation: none; }
+  .welcome-word, .welcome-word::after, .terminal-cursor { animation: none; }
+  nav a { transition: none; }
+}

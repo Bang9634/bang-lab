@@ -1,0 +1,12 @@
+{
+  "name": "bang-lab",
+  "private": true,
+  "workspaces": ["apps/web"],
+  "scripts": {
+    "dev": "npm run dev --workspace apps/web",
+    "check": "npm run check --workspace apps/web",
+    "build": "npm run build --workspace apps/web",
+    "preview": "npm run preview --workspace apps/web"
+  },
+  "engines": { "node": ">=22.12.0" }
+}
