@@ -14,7 +14,7 @@ Markdown / MDX → Astro 빌드 → 정적 파일 → Nginx → 브라우저
 ```
 
 Oracle Cloud VM, Nginx, Let's Encrypt로 수동 배포와 HTTPS 설정을 완료했습니다.
-GitHub Actions의 검사·빌드·릴리스 배포 워크플로를 구현했으며, 원격 첫 실행은 별도로 확인해야 합니다.
+GitHub Actions의 수동 배포 성공을 확인했고, `main` push 시 검사·빌드·배포하는 자동 배포 설정도 완료했습니다.
 Secrets 등록과 자동 배포 활성화 절차는 [배포 문서](docs/deployment.md)를 참고합니다.
 
 ## 로컬 개발
