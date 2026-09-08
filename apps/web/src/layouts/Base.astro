@@ -1,11 +1,12 @@
 ---
 import '../styles/global.css';
 import { z } from 'astro/zod';
+import { profile } from '../config/profile';
 
-const contactEmail = (import.meta.env.CONTACT_EMAIL ?? '').trim();
-const profileName = (import.meta.env.PROFILE_NAME ?? '').trim() || "Bang's Lab";
+const contactEmail = profile.contactEmail.trim();
+const profileName = profile.profileName.trim() || "Bang's Lab";
 if (contactEmail && !z.email().safeParse(contactEmail).success) {
-  throw new Error('CONTACT_EMAIL must be a valid email address or empty.');
+  throw new Error('profile.contactEmail must be a valid email address or empty.');
 }
 interface Props { title?: string; description?: string; landing?: boolean }
 const { landing = false, title = "Bang's Lab", description = '코드를 만들고, 가설을 세우고, 측정하며 배우는 소프트웨어 엔지니어링 기록.' } = Astro.props;

@@ -13,8 +13,9 @@ Astro, TypeScript, Markdown/MDX, npm workspaces를 사용합니다.
 Markdown / MDX → Astro 빌드 → 정적 파일 → Nginx → 브라우저
 ```
 
-Oracle Cloud VM, Nginx, Let's Encrypt, GitHub Actions를 이용한 배포를 계획하고 있습니다.
-현재는 로컬 사이트와 CI 검증 워크플로가 구현돼 있고, 자동 배포는 아직 구현하지 않았습니다.
+Oracle Cloud VM, Nginx, Let's Encrypt로 수동 배포와 HTTPS 설정을 완료했습니다.
+GitHub Actions의 검사·빌드·릴리스 배포 워크플로를 구현했으며, 원격 첫 실행은 별도로 확인해야 합니다.
+Secrets 등록과 자동 배포 활성화 절차는 [배포 문서](docs/deployment.md)를 참고합니다.
 
 ## 로컬 개발
 
@@ -38,22 +39,13 @@ npm run preview
 
 ## 사이트 표시 정보 설정
 
-푸터의 이메일과 저작권 이름은 소스에 직접 작성하지 않고 빌드 환경변수로 전달합니다.
-`apps/web/.env.example`을 `apps/web/.env`로 복사한 뒤 값을 입력합니다.
-기존 `.env`가 있다면 덮어쓰지 않고 필요한 항목만 수정합니다.
+푸터 이메일과 저작권 이름은 [`apps/web/src/config/profile.ts`](apps/web/src/config/profile.ts)에서 정적으로 관리합니다.
+`contactEmail`과 `profileName`을 수정한 뒤 빌드·배포하면 반영됩니다.
+이메일이 비어 있으면 숨기고, 이름이 비어 있으면 `Bang's Lab`을 표시합니다.
+잘못된 이메일 형식은 빌드 오류로 처리합니다.
 
-| 변수 | 용도 | 비어 있을 때 |
-| --- | --- | --- |
-| `CONTACT_EMAIL` | 푸터의 이메일과 메일 링크 | 연락처를 표시하지 않음 |
-| `PROFILE_NAME` | 푸터 저작권 이름 | `Bang's Lab` 표시 |
-
-`.env`는 Git에서 제외하며, `.env.example`에는 실제 개인정보를 넣지 않습니다.
-이메일 형식이 잘못되면 값을 출력하지 않는 오류 메시지와 함께 빌드가 실패합니다.
-환경변수 변경 후 개발 서버를 재시작하고, 배포 사이트는 다시 빌드해야 합니다.
-화면에 출력한 값은 최종 HTML과 빌드 아티팩트에서 볼 수 있습니다.
-이 구조는 Git 소스·커밋에서 정보를 분리하며, 사이트 방문자에게 숨기는 기능은 아닙니다.
-
-GitHub Actions 설정은 [배포 문서](docs/deployment.md#빌드-환경변수)를 참고합니다.
+이 값은 공개 소스와 배포 HTML에 포함됩니다. `.env`나 GitHub Secrets에 등록할 필요가 없습니다.
+배포 접속 정보와 개인키는 계속 GitHub Secrets에서 관리합니다.
 
 ## 페이지 구성
 
@@ -69,10 +61,10 @@ Markdown/MDX 기반 글 작성 구조는 Log를 구현할 때 새로 구성할 �
 ```text
 apps/web/             Astro 웹사이트
 infra/nginx/          Nginx HTTP 초기 설정 템플릿
-infra/scripts/        향후 배포 스크립트를 둘 위치
+infra/scripts/        SSH 전송·릴리스 전환 스크립트
 docs/                 아키텍처, 설계 결정, 배포 문서
 docs/ai-context/      AI 코딩 에이전트를 위한 프로젝트 맥락과 작업 규칙
-.github/workflows/    CI 검증 워크플로
+.github/workflows/    CI/CD 워크플로
 ```
 
 자세한 내용은 [아키텍처](docs/architecture.md), [배포](docs/deployment.md),

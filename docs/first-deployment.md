@@ -96,7 +96,7 @@ curl -I http://127.0.0.1/
 
 ## 5. 빌드 및 전송 — Mac의 저장소 루트
 
-`apps/web/.env`의 공개할 이름·이메일을 확인하고 빌드한다.
+`apps/web/src/config/profile.ts`의 공개할 이름·이메일을 확인하고 빌드한다.
 현재 설치된 의존성이 없다면 먼저 `npm ci`를 실행한다.
 
 ```sh

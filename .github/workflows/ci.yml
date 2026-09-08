@@ -1,9 +1,14 @@
-name: Validate website
+name: Validate and deploy website
 
 on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: website-${{ github.ref }}
+  cancel-in-progress: false
 
 permissions:
   contents: read
@@ -21,11 +26,32 @@ jobs:
       - run: npm ci
       - run: npm run check
       - run: npm run build
-        env:
-          CONTACT_EMAIL: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.CONTACT_EMAIL || '' }}
-          PROFILE_NAME: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.PROFILE_NAME || '' }}
+      - name: Add release identifier
+        run: printf '%s\n' "$GITHUB_SHA" > apps/web/dist/release.txt
       - uses: actions/upload-artifact@v4
         with:
           name: bang-lab-web
           path: apps/web/dist
           if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main' && (github.event_name == 'workflow_dispatch' || (github.event_name == 'push' && vars.AUTO_DEPLOY == 'true'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: bang-lab-web
+          path: deploy-dist
+      - name: Deploy verified artifact
+        run: bash infra/scripts/deploy.sh
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_PORT: ${{ secrets.DEPLOY_PORT }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          SITE_URL: ${{ secrets.SITE_URL }}
