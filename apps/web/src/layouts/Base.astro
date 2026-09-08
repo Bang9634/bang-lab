@@ -41,12 +41,12 @@ const navigation = [['about', 'About'], ['work', 'Work'], ['contact', 'Contact']
     <a class="skip-link" href="#main">본문으로 바로가기</a>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href={landing ? '#top' : '/#top'} aria-label="Bang's Lab 홈으로">
+        <a class="brand" data-section-scroll={landing ? true : undefined} href={landing ? '#top' : '/#top'} aria-label="Bang's Lab 홈으로">
           <svg width="25" height="25" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="2" y="3" width="20" height="18" rx="5"/><path d="m6 8 4 4-4 4m7 0h5"/></svg>
           <span>Bang's Lab</span>
         </a>
         <nav aria-label="주요 메뉴">
-          {navigation.map(([id, label]) => <a href={landing ? `#${id}` : `/#${id}`}>{label}</a>)}
+          {navigation.map(([id, label]) => <a data-section-scroll={landing ? true : undefined} href={landing ? `#${id}` : `/#${id}`}>{label}</a>)}
           <span class="nav-disabled" role="link" aria-disabled="true" aria-label="Log — 준비 중" title="준비 중">Log</span>
         </nav>
       </div>
@@ -60,3 +60,22 @@ const navigation = [['about', 'About'], ['work', 'Work'], ['contact', 'Contact']
     </footer>
   </body>
 </html>
+
+<script>
+  // Enhance only in-page header navigation; keep real page links and modified clicks native.
+  document.querySelectorAll<HTMLAnchorElement>('.site-header a[data-section-scroll]').forEach((link) => {
+    link.addEventListener('click', (event) => {
+      if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+      if (link.hasAttribute('download') || (link.target && link.target !== '_self')) return;
+
+      const href = link.getAttribute('href');
+      if (!href?.startsWith('#')) return;
+      const section = document.getElementById(href.slice(1));
+      if (!section) return;
+
+      event.preventDefault();
+      // CSS controls smooth scrolling and the reduced-motion preference, without a history entry.
+      section.scrollIntoView({ behavior: 'auto', block: 'start' });
+    });
+  });
+</script>
